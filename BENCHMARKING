@@ -1,0 +1,41 @@
+# Script exercise Regional Public Healt
+# to be solved in:
+# www.r-fiddle.org/
+#****************************************************************************
+# BENCHMARKING_01: DEA CRS, VRS, SE,                         (November 2017, when in Bellaterra)
+#Programmed by: Diego Prior 
+#****************
+# LIBRARIES REQUIRED
+#****************************************************************************
+library(Benchmarking) 
+# STEP 1: READ THE DATA *************************************************************
+x <- matrix(c(626715,51458,282488,201000,124729,225000,138917,208399,118320,171395, 124849,30374,51357,52825,14932, 140307,473.39,2723,3257.40,1000,4783.12,2176.57,3613.40,1219.20,757.91,1789,14.38,452040,14390.86,429264,254010,23689.18,140936,109758.31,121671,123317.69,52552.42,42072.58,82755.18,33303.12,40593,8248.54,23348.96,13155.31,8760.91),ncol=3) #define inputs
+y <- matrix(c(10405092,10213486,2526450,6663000,2148552,7889538,5556241,4999266,4839000,6456799, 3373278,534332,3024000,1084678,2945295),ncol=1) #define outputs
+#************************************************************
+# STEP 2: find the solution of the programs
+e_crs <- dea(x,y,RTS='crs', ORIENTATION="in", SLACK=TRUE)
+e_vrs <- dea(x,y, RTS='vrs', ORIENTATION="in", SLACK=TRUE)
+e_crs_d <- dea.dual(x,y,RTS='crs', ORIENTATION="in")
+e_vrs_d <- dea.dual(x,y, RTS='vrs', ORIENTATION="in")
+e_se <- eff(e_crs)/eff(e_vrs)
+# STEP 3: see the results
+eff(e_crs)
+eff(e_vrs)
+e_se
+# shadow weights (these variables are related with the primal in CRS and in VRS)
+e_crs_d$u
+e_crs_d$v
+e_vrs_d$u
+e_vrs_d$v
+
+# peers and lambdas (these variables are related with the dual in CRS and in VRS)
+peers(e_crs)
+lambda(e_crs)
+peers(e_vrs)
+lambda(e_vrs)
+
+# slack variables (these variables are related with the dual in CRS and in VRS)
+e_crs$sy
+e_crs$sx
+e_vrs$sy
+e_vrs$sx
